@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: banking
+    schema: raw
+    tables: 
+      - name: customers
+      - name: accounts
+      - name: cards
+      - name: loans
+      - name: merchants
+      - name: branches
+      - name: transactions

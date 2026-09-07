@@ -142,4 +142,25 @@ models:
       - name: start_date
         description: "Date when the loan started."
         data_tests:
-          - not_null         
+          - not_null
+
+  - name: stg_merchants
+    description: "One row per merchant."
+
+    columns:
+      - name: merchant_id
+        description: "Unique identifier for the merchant."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: merchant_name
+        description: "Name of the merchant."
+        data_tests:
+          - not_null
+
+      - name: city
+        description: "City where the merchant is located."
+        data_tests:
+          - not_null
+                  

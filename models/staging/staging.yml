@@ -108,4 +108,38 @@ models:
       - name: expiration_date
         description: "Date when the card expires."
         data_tests:
-          - not_null        
+          - not_null
+
+  - name: stg_loans
+    description: "One row per loan associated with a customer."
+
+    columns:
+      - name: loan_id
+        description: "Unique identifier for the loan."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Identifier of the customer who took the loan."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: loan_amount
+        description: "Principal amount of the loan in US dollars."
+        data_tests:
+          - not_null
+
+      - name: interest_rate
+        description: "Annual interest rate applied to the loan."
+        data_tests:
+          - not_null
+
+      - name: start_date
+        description: "Date when the loan started."
+        data_tests:
+          - not_null         

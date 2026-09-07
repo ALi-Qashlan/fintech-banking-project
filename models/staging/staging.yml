@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "One row per customer from the banking customer source."
+    
+    columns:
+      - name: customer_id
+        description:  "Unique identifier for each customer."
+        data_tests:
+          - not_null
+          - unique
+    
+      - name: first_name
+        description: "Customer's first name."
+        data_tests:
+          - not_null
+
+      - name: last_name
+        description: "Customer's last name."
+        tests:
+          - not_null
+
+      - name: email
+        description: "Customer's email address."
+        tests:
+          - not_null
+
+      - name: city
+        description: "City associated with the customer."
+        tests:
+          - not_null
+
+      - name: credit_score
+        description: "Customer's credit score."
+        tests:
+          - not_null
+        
+      - name: created_at
+        description: "Timestamp when the customer record was created."
+        tests:
+          - not_null

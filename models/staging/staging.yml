@@ -77,3 +77,35 @@ models:
         description: "Date when the account was opened."
         data_tests:
           - not_null
+
+  - name: stg_cards
+    description: "One row per bank card associated with a bank account."
+
+    columns:
+      - name: card_id
+        description: "Unique identifier for the card."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: account_id
+        description: "Identifier of the account associated with the card."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_accounts')
+                field: account_id
+
+      - name: card_type
+        description: "Type of bank card."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Debit', 'Credit']
+
+      - name: expiration_date
+        description: "Date when the card expires."
+        data_tests:
+          - not_null        

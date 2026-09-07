@@ -18,25 +18,62 @@ models:
 
       - name: last_name
         description: "Customer's last name."
-        tests:
+        data_tests:
           - not_null
 
       - name: email
         description: "Customer's email address."
-        tests:
+        data_tests:
           - not_null
 
       - name: city
         description: "City associated with the customer."
-        tests:
+        data_tests:
           - not_null
 
       - name: credit_score
         description: "Customer's credit score."
-        tests:
+        data_tests:
           - not_null
         
       - name: created_at
         description: "Timestamp when the customer record was created."
-        tests:
+        data_tests:
+          - not_null
+
+  - name: stg_accounts
+    description: "One row per bank account."
+
+    columns:
+      - name: account_id
+        description: "Unique identifier for the account."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Identifier of the customer who owns the account."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: account_type
+        description: "Type of bank account."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Checking', 'Savings', 'Business']
+
+      - name: balance_usd
+        description: "Current account balance in US dollars."
+        data_tests:
+          - not_null
+
+      - name: open_date
+        description: "Date when the account was opened."
+        data_tests:
           - not_null

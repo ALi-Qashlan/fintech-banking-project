@@ -164,3 +164,30 @@ models:
         data_tests:
           - not_null
                   
+  - name: stg_branches
+    description: "One row per bank branch."
+
+    columns:   
+      - name: branch_id
+        description: "Unique identifier for the branch."
+        data_tests:  
+          - not_null
+          - unique
+
+      - name: branch_name
+        description: "Name of the bank branch."
+        data_tests:
+          - not_null
+
+      - name: manager_name
+        description: "Name of the branch manager."
+        
+      - name: city
+        description: "City where the branch is located."
+        data_tests:
+          - not_null
+
+      - name: country
+        description: "Country where the branch is located."
+        data_tests:
+          - not_null   

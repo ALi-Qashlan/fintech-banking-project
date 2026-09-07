@@ -191,3 +191,41 @@ models:
         description: "Country where the branch is located."
         data_tests:
           - not_null   
+
+  - name: stg_transactions
+    description: "One row per financial transaction."
+
+    columns:
+      - name: transaction_id
+        description: "Unique identifier for the transaction."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: account_id
+        description: "Identifier of the account from which the transaction was made."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_accounts')
+                field: account_id
+
+      - name: merchant_id
+        description: "Identifier of the merchant involved in the transaction."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_merchants')
+                field: merchant_id
+
+      - name: amount_usd
+        description: "Transaction amount in US dollars."
+        data_tests:
+          - not_null
+          
+      - name: transaction_at
+        description: "Timestamp when the transaction occurred."
+        data_tests:
+          - not_null    

@@ -97,4 +97,52 @@ models:
           - not_null
           - accepted_values: 
               arguments:
-                values: [0, 1]            
+                values: [0, 1] 
+  - name: int_customer_loans
+    description: "One row per borrowing customer summarizing loan count, recorded loan exposure, loan-size metrics, interest rates, and loan history."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the borrowing customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: loan_count
+        description: "Total number of loans recorded for the customer."
+        data_tests:
+          - not_null
+
+      - name: total_loan_exposure_usd
+        description: "Total recorded loan principal associated with the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: average_loan_amount_usd
+        description: "Average recorded loan amount for the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: max_loan_amount_usd
+        description: "Largest recorded individual loan amount for the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: average_interest_rate
+        description: "Average interest rate across the customer's recorded loans."
+        data_tests:
+          - not_null
+
+      - name: first_loan_start_date
+        description: "Earliest recorded loan start date for the customer."
+        data_tests:
+          - not_null
+
+      - name: latest_loan_start_date
+        description: "Most recent recorded loan start date for the customer."
+        data_tests:
+          - not_null                           

@@ -145,4 +145,43 @@ models:
       - name: latest_loan_start_date
         description: "Most recent recorded loan start date for the customer."
         data_tests:
-          - not_null                           
+          - not_null 
+
+  - name: int_customer_transactions
+    description: "One row per customer with transaction activity, summarizing transaction frequency, volume, average transaction size, and activity dates."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: transaction_count
+        description: "Total number of transactions recorded for the customer."
+        data_tests:
+          - not_null
+
+      - name: total_transaction_volume_usd
+        description: "Total transaction volume associated with the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: average_transaction_amount_usd
+        description: "Average transaction amount for the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: first_transaction_at
+        description: "Timestamp of the customer's earliest recorded transaction."
+        data_tests:
+          - not_null
+
+      - name: last_transaction_at
+        description: "Timestamp of the customer's most recent recorded transaction."
+        data_tests:
+          - not_null                          

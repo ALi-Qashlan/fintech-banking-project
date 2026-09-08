@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: int_customer_accounts
+    description: "One row per customer summarizing account ownership, account-type breadth, balances, and first account opening date."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: account_count
+        description: "Total number of bank accounts owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: distinct_account_type_count
+        description: "Number of distinct account types owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: total_balance_usd
+        description: "Total balance across all accounts owned by the customer, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: first_account_open_date
+        description: "Earliest account opening date associated with the customer."
+        data_tests:
+          - not_null
+
+      - name: has_checking_account
+        description: "Indicates whether the customer has at least one Checking account."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: has_savings_account
+        description: "Indicates whether the customer has at least one Savings account."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: has_business_account
+        description: "Indicates whether the customer has at least one Business account."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]

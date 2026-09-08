@@ -58,3 +58,43 @@ models:
           - accepted_values:
               arguments:
                 values: [0, 1]
+
+  - name: int_customer_cards
+    description: "One row per customer summarizing card ownership and card-type breadth."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: card_count
+        description: "Total number of cards owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: distinct_card_type_count
+        description: "Number of distinct card types owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: has_debit_card
+        description: "Indicates whether the customer has at least one Debit card."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: has_credit_card
+        description: "Indicates whether the customer has at least one Credit card."
+        data_tests:
+          - not_null
+          - accepted_values: 
+              arguments:
+                values: [0, 1]            

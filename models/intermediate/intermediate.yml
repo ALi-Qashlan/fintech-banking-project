@@ -184,4 +184,14 @@ models:
       - name: last_transaction_at
         description: "Timestamp of the customer's most recent recorded transaction."
         data_tests:
-          - not_null                          
+          - not_null  
+
+  - name: int_quarters
+    description: "One row per calendar quarter covering the transaction history from 2019 through 2025."
+
+    columns:
+      - name: quarter_start_date
+        description: "Start date of the calendar quarter."
+        data_tests:
+          - not_null
+          - unique                                  

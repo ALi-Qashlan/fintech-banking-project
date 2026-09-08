@@ -194,4 +194,48 @@ models:
         description: "Start date of the calendar quarter."
         data_tests:
           - not_null
-          - unique                                  
+          - unique
+
+  - name: int_customer_quarterly_activity
+    description: "One row per customer per eligible calendar quarter, summarizing transaction activity from the quarter their banking relationship began onward."
+    
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - customer_id
+              - quarter_start_date
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: quarter_start_date
+        description: "Start date of the calendar quarter."
+        data_tests:
+          - not_null
+
+      - name: transaction_count
+        description: "Number of transactions recorded for the customer during the quarter."
+        data_tests:
+          - not_null
+
+      - name: total_transaction_volume_usd
+        description: "Total transaction volume for the customer during the quarter, in US dollars."
+        data_tests:
+          - not_null
+
+      - name: average_transaction_amount_usd
+        description: "Average transaction amount during the quarter. Null when no transactions occurred."
+
+      - name: first_transaction_at
+        description: "Timestamp of the customer's first transaction during the quarter. Null when no transactions occurred."
+
+      - name: last_transaction_at
+        description: "Timestamp of the customer's last transaction during the quarter. Null when no transactions occurred."                                            

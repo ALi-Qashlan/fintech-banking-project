@@ -51,6 +51,7 @@ models:
         data_type: numeric(12, 2)
         data_tests:
           - not_null
+          - non_negative
 
       - name: transaction_at
         description: "Timestamp when the transaction occurred."
@@ -94,6 +95,7 @@ models:
         data_type: numeric(12,2)
         data_tests:
           - not_null
+          - positive
 
       - name: interest_rate
         description: "Recorded interest rate for the loan."
@@ -151,12 +153,14 @@ models:
         data_type: bigint
         data_tests:
           - not_null
+          - non_negative
 
       - name: total_transaction_volume_usd
         description: "Total recorded transaction volume associated with the merchant."
         data_type: numeric(20, 2)
         data_tests:
           - not_null
+          - non_negative
 
       - name: average_transaction_amount_usd
         description: "Average recorded transaction amount for the merchant."

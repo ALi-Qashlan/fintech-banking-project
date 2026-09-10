@@ -19,11 +19,19 @@ models:
         description: "Total number of bank accounts owned by the customer."
         data_tests:
           - not_null
+          - positive
 
       - name: distinct_account_type_count
         description: "Number of distinct account types owned by the customer."
         data_tests:
           - not_null
+          - between_values:
+              arguments:
+              min_value: 1
+              max_value: 3
+          - less_than_or_equal_to_column:
+              arguments:
+                compare_column: account_count
 
       - name: total_balance_usd
         description: "Total balance across all accounts owned by the customer, in US dollars."
@@ -77,11 +85,19 @@ models:
         description: "Total number of cards owned by the customer."
         data_tests:
           - not_null
+          - positive
 
       - name: distinct_card_type_count
         description: "Number of distinct card types owned by the customer."
         data_tests:
           - not_null
+          - between_values:
+              arguments:
+                min_value: 1
+                max_value: 2
+          - less_than_or_equal_to_column:
+              arguments:
+                compare_column: card_count      
 
       - name: has_debit_card
         description: "Indicates whether the customer has at least one Debit card."
@@ -116,16 +132,22 @@ models:
         description: "Total number of loans recorded for the customer."
         data_tests:
           - not_null
+          - positive
 
       - name: total_loan_exposure_usd
         description: "Total recorded loan principal associated with the customer, in US dollars."
         data_tests:
           - not_null
+          - positive
 
       - name: average_loan_amount_usd
         description: "Average recorded loan amount for the customer, in US dollars."
         data_tests:
           - not_null
+          - positive
+          - less_than_or_equal_to_column:
+              arguments:
+                compare_column: max_loan_amount_usd
 
       - name: max_loan_amount_usd
         description: "Largest recorded individual loan amount for the customer, in US dollars."
@@ -165,16 +187,19 @@ models:
         description: "Total number of transactions recorded for the customer."
         data_tests:
           - not_null
+          - positive
 
       - name: total_transaction_volume_usd
         description: "Total transaction volume associated with the customer, in US dollars."
         data_tests:
           - not_null
+          - positive
 
       - name: average_transaction_amount_usd
         description: "Average transaction amount for the customer, in US dollars."
         data_tests:
           - not_null
+          - positive
 
       - name: first_transaction_at
         description: "Timestamp of the customer's earliest recorded transaction."
@@ -225,11 +250,13 @@ models:
         description: "Number of transactions recorded for the customer during the quarter."
         data_tests:
           - not_null
+          - non_negative
 
       - name: total_transaction_volume_usd
         description: "Total transaction volume for the customer during the quarter, in US dollars."
         data_tests:
           - not_null
+          - non_negative
 
       - name: average_transaction_amount_usd
         description: "Average transaction amount during the quarter. Null when no transactions occurred."

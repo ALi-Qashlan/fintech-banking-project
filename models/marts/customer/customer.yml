@@ -52,3 +52,57 @@ models:
         description: "Number of distinct product types held across Checking, Savings, Business, Debit, Credit, and Loan."
         data_tests:
           - not_null
+
+  - name: customer_engagement_trends
+    description: "One row per account-holding customer summarizing recent quarterly transaction engagement and classifying the customer's current engagement trend."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_customer_accounts')
+                field: customer_id
+
+      - name: quarters_observed
+        description: "Number of recent eligible quarters observed for the customer, up to four."
+        data_tests:
+          - not_null
+
+      - name: active_quarters_recent
+        description: "Number of recent observed quarters containing transaction activity."
+        data_tests:
+          - not_null
+
+      - name: zero_activity_quarters_recent
+        description: "Number of recent observed quarters containing zero transactions."
+        data_tests:
+          - not_null
+
+      - name: latest_transaction_count
+        description: "Transaction count in the customer's latest eligible quarter."
+        data_tests:
+          - not_null
+
+      - name: latest_transaction_volume_usd
+        description: "Transaction volume in the customer's latest eligible quarter."
+        data_tests:
+          - not_null
+
+      - name: engagement_trend
+        description: "Classification of the customer's recent transaction engagement trajectory."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - insufficient_history
+                  - persistently_inactive
+                  - sustained_decline
+                  - recent_decline
+                  - sustained_improvement
+                  - recent_improvement
+                  - mixed_or_stable  

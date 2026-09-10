@@ -1,0 +1,120 @@
+version: 2
+
+models:
+  - name: fct_transactions
+    description: "Transaction-level fact table enriched with the customer associated with each account."
+
+    config:
+      contract:
+        enforced: true
+
+    columns:
+      - name: transaction_id
+        description: "Unique identifier for the transaction."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+
+      - name: account_id
+        description: "Account associated with the transaction."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_accounts')
+                field: account_id
+
+      - name: customer_id
+        description: "Customer who owns the account associated with the transaction."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: merchant_id
+        description: "Merchant associated with the transaction."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_merchants')
+                field: merchant_id
+
+      - name: amount_usd
+        description: "Recorded transaction amount in US dollars."
+        data_type: numeric(12, 2)
+        data_tests:
+          - not_null
+
+      - name: transaction_at
+        description: "Timestamp when the transaction occurred."
+        data_type: timestamp
+        data_tests:
+          - not_null
+
+  - name: fct_loans
+    description: "Loan-level fact table enriched with customer credit profile and a project-defined loan size classification."
+
+    config:
+      contract:
+        enforced: true
+
+    columns:
+      - name: loan_id
+        description: "Unique identifier for the loan."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Customer associated with the loan."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: credit_score
+        description: "Customer credit score recorded in the customer source."
+        data_type: integer
+        data_tests:
+          - not_null
+
+      - name: loan_amount
+        description: "Original recorded loan principal amount."
+        data_type: numeric(12,2)
+        data_tests:
+          - not_null
+
+      - name: interest_rate
+        description: "Recorded interest rate for the loan."
+        data_type: numeric
+        data_tests:
+          - not_null
+
+      - name: start_date
+        description: "Date on which the loan was recorded as starting."
+        data_type: date
+        data_tests:
+          - not_null
+
+      - name: loan_size_band
+        description: "Project-defined loan size classification: small, medium, or large."
+        data_type: text
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - small
+                  - medium
+                  - large

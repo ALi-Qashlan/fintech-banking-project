@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: customer_relationship_summary
+    description: "One row per customer summarizing customer profile, product ownership, balances, lending exposure, and historical transaction engagement."
+
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: account_count
+        description: "Number of accounts owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: card_count
+        description: "Number of cards owned by the customer."
+        data_tests:
+          - not_null
+
+      - name: loan_count
+        description: "Number of recorded loans associated with the customer."
+        data_tests:
+          - not_null
+
+      - name: has_loan
+        description: "Indicates whether the customer has at least one recorded loan."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: transaction_count
+        description: "Number of transactions recorded for the customer."
+        data_tests:
+          - not_null
+
+      - name: product_category_count
+        description: "Number of product categories held by the customer across accounts, cards, and loans."
+        data_tests:
+          - not_null
+
+      - name: product_type_count
+        description: "Number of distinct product types held across Checking, Savings, Business, Debit, Credit, and Loan."
+        data_tests:
+          - not_null

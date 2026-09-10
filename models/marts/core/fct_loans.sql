@@ -2,7 +2,7 @@ select l.loan_id,
        l.customer_id,
        c.credit_score,
        l.loan_amount,
-       l.interest_rate,
+       cast(l.interest_rate as numeric(5,2)) as interest_rate,
        l.start_date,
 
        case

@@ -97,7 +97,7 @@ models:
 
       - name: interest_rate
         description: "Recorded interest rate for the loan."
-        data_type: numeric
+        data_type: numeric(5, 2)
         data_tests:
           - not_null
 
@@ -118,3 +118,54 @@ models:
                   - small
                   - medium
                   - large
+
+  - name: dim_merchants
+    description: "One row per merchant containing merchant attributes and summary transaction activity."
+
+    config:
+      contract:
+        enforced: true
+
+    columns:
+      - name: merchant_id
+        description: "Unique identifier for the merchant."
+        data_type: varchar
+        data_tests:
+          - not_null
+          - unique
+
+      - name: merchant_name
+        description: "Merchant name."
+        data_type: varchar
+        data_tests:
+          - not_null
+
+      - name: city
+        description: "City associated with the merchant."
+        data_type: varchar
+        data_tests:
+          - not_null
+
+      - name: transaction_count
+        description: "Number of recorded transactions associated with the merchant."
+        data_type: bigint
+        data_tests:
+          - not_null
+
+      - name: total_transaction_volume_usd
+        description: "Total recorded transaction volume associated with the merchant."
+        data_type: numeric(20, 2)
+        data_tests:
+          - not_null
+
+      - name: average_transaction_amount_usd
+        description: "Average recorded transaction amount for the merchant."
+        data_type: numeric(12, 2)
+
+      - name: first_transaction_at
+        description: "Timestamp of the merchant's first recorded transaction."
+        data_type: timestamp
+
+      - name: latest_transaction_at
+        description: "Timestamp of the merchant's most recent recorded transaction."
+        data_type: timestamp                  

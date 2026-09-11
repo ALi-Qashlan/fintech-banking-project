@@ -2,7 +2,8 @@ version: 2
 
 models:
   - name: customer_relationship_summary
-    description: "One row per customer summarizing customer profile, product ownership, balances, lending exposure, and historical transaction engagement."
+    description: "Customer-level relationship summary combining product ownership, balances, lending exposure, and transaction activity for all customers."
+    
 
     columns:
       - name: customer_id

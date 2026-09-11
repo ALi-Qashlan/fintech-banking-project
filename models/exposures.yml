@@ -1,0 +1,22 @@
+version: 2
+
+exposures:
+  - name: banking_analytics_dashboard
+    label: Banking Analytics Dashboard
+    type: dashboard
+    maturity: high
+
+    description: >
+      Power BI dashboard presenting customer relationships,
+      engagement trends, lending activity, transaction activity,
+      and merchant performance.
+
+    depends_on:
+      - ref('customer_relationship_summary')
+      - ref('customer_engagement_trends')
+      - ref('fct_transactions')
+      - ref('fct_loans')
+      - ref('dim_merchants')
+
+    owner:
+      name: Ali Mahmoud

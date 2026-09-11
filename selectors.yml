@@ -1,0 +1,6 @@
+selectors:
+  - name: marts
+    description: >
+      All customer-facing and core analytical marts.
+    definition:
+      path: models/marts

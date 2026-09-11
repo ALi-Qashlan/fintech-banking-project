@@ -27,8 +27,8 @@ models:
           - not_null
           - between_values:
               arguments:
-              min_value: 1
-              max_value: 3
+                min_value: 1
+                max_value: 3
           - less_than_or_equal_to_column:
               arguments:
                 compare_column: account_count

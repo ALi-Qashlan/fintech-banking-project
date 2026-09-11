@@ -106,3 +106,78 @@ models:
                   - sustained_improvement
                   - recent_improvement
                   - mixed_or_stable  
+
+unit_tests:
+  - name: test_customer_engagement_trend_classification
+    description: >
+      Verifies the customer engagement classification logic
+      across all supported engagement trends.
+
+    model: customer_engagement_trends
+
+    given:
+      - input: ref('int_customer_quarterly_activity')
+        format: dict
+        rows:
+
+          # insufficient_history
+          - {customer_id: C001, quarter_start_date: "2025-07-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+
+          # persistently_inactive
+          - {customer_id: C002, quarter_start_date: "2025-01-01", transaction_count: 0, total_transaction_volume_usd: 0}
+          - {customer_id: C002, quarter_start_date: "2025-04-01", transaction_count: 0, total_transaction_volume_usd: 0}
+          - {customer_id: C002, quarter_start_date: "2025-07-01", transaction_count: 0, total_transaction_volume_usd: 0}
+
+          # sustained_decline
+          - {customer_id: C003, quarter_start_date: "2025-01-01", transaction_count: 30, total_transaction_volume_usd: 3000}
+          - {customer_id: C003, quarter_start_date: "2025-04-01", transaction_count: 20, total_transaction_volume_usd: 2000}
+          - {customer_id: C003, quarter_start_date: "2025-07-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+
+          # recent_decline
+          - {customer_id: C004, quarter_start_date: "2025-01-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C004, quarter_start_date: "2025-04-01", transaction_count: 20, total_transaction_volume_usd: 2000}
+          - {customer_id: C004, quarter_start_date: "2025-07-01", transaction_count: 15, total_transaction_volume_usd: 1500}
+
+          # sustained_improvement
+          - {customer_id: C005, quarter_start_date: "2025-01-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C005, quarter_start_date: "2025-04-01", transaction_count: 20, total_transaction_volume_usd: 2000}
+          - {customer_id: C005, quarter_start_date: "2025-07-01", transaction_count: 30, total_transaction_volume_usd: 3000}
+
+          # recent_improvement
+          - {customer_id: C006, quarter_start_date: "2025-01-01", transaction_count: 20, total_transaction_volume_usd: 2000}
+          - {customer_id: C006, quarter_start_date: "2025-04-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C006, quarter_start_date: "2025-07-01", transaction_count: 15, total_transaction_volume_usd: 1500}
+
+          # mixed_or_stable
+          - {customer_id: C007, quarter_start_date: "2025-01-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C007, quarter_start_date: "2025-04-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C007, quarter_start_date: "2025-07-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+
+    expect:
+      format: dict
+      rows:
+        - {customer_id: C001, engagement_trend: insufficient_history}
+        - {customer_id: C002, engagement_trend: persistently_inactive}
+        - {customer_id: C003, engagement_trend: sustained_decline}
+        - {customer_id: C004, engagement_trend: recent_decline}
+        - {customer_id: C005, engagement_trend: sustained_improvement}
+        - {customer_id: C006, engagement_trend: recent_improvement}
+        - {customer_id: C007, engagement_trend: mixed_or_stable}
+
+  - name: test_customer_engagement_uses_latest_four_quarters
+    model: customer_engagement_trends
+
+    given:
+      - input: ref('int_customer_quarterly_activity')
+        format: dict
+        rows:
+          - {customer_id: C008, quarter_start_date: "2024-07-01", transaction_count: 100, total_transaction_volume_usd: 10000}
+          - {customer_id: C008, quarter_start_date: "2024-10-01", transaction_count: 10, total_transaction_volume_usd: 1000}
+          - {customer_id: C008, quarter_start_date: "2025-01-01", transaction_count: 20, total_transaction_volume_usd: 2000}
+          - {customer_id: C008, quarter_start_date: "2025-04-01", transaction_count: 30, total_transaction_volume_usd: 3000}
+          - {customer_id: C008, quarter_start_date: "2025-07-01", transaction_count: 40, total_transaction_volume_usd: 4000}
+
+    expect:
+      format: dict
+      rows:
+        - {customer_id: C008, quarters_observed: 4, engagement_trend: sustained_improvement}

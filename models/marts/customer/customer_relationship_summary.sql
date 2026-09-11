@@ -20,10 +20,7 @@ select c.customer_id,
        coalesce(cd.has_credit_card, 0) as has_credit_card,
 
        coalesce(l.loan_count, 0) as loan_count,
-       case
-           when coalesce(l.loan_count, 0) > 0 then 1
-           else 0
-       end as has_loan,
+       {{ to_binary_flag("coalesce(l.loan_count, 0) > 0") }} as has_loan,
        coalesce(l.total_loan_exposure_usd, 0) as total_loan_exposure_usd,
        l.average_loan_amount_usd,
        l.max_loan_amount_usd,
@@ -37,20 +34,12 @@ select c.customer_id,
        t.first_transaction_at,
        t.last_transaction_at,
 
-       case
-           when coalesce(a.account_count, 0) > 0 then 1
-           else 0
-       end
+       {{ to_binary_flag("coalesce(a.account_count, 0) > 0") }}
        +
-       case
-           when coalesce(cd.card_count, 0) > 0 then 1
-           else 0
-       end
+       {{ to_binary_flag("coalesce(cd.card_count, 0) > 0") }}
        +
-       case
-           when coalesce(l.loan_count, 0) > 0 then 1
-           else 0
-       end as product_category_count,
+       {{ to_binary_flag("coalesce(l.loan_count, 0) > 0") }}
+       as product_category_count,
 
        coalesce(a.has_checking_account, 0)
        + coalesce(a.has_savings_account, 0)
@@ -58,10 +47,8 @@ select c.customer_id,
        + coalesce(cd.has_debit_card, 0)
        + coalesce(cd.has_credit_card, 0)
        +
-       case
-           when coalesce(l.loan_count, 0) > 0 then 1
-           else 0
-       end as product_type_count
+       {{ to_binary_flag("coalesce(l.loan_count, 0) > 0") }}
+       as product_type_count
 
   from {{ ref('stg_customers') }} as c
 

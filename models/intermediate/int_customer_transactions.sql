@@ -1,5 +1,5 @@
 select a.customer_id,
-       count(t.transaction_id_broken) as transaction_count,
+       count(t.transaction_id) as transaction_count,
        sum(t.amount_usd) as total_transaction_volume_usd,
        avg(t.amount_usd) as average_transaction_amount_usd,
        min(t.transaction_at) as first_transaction_at,

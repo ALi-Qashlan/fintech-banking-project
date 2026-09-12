@@ -49,3 +49,16 @@ jobs:
 
       - name: Parse dbt project
         run: dbt parse --profiles-dir .github/ci
+
+      - name: Load CI fixture data
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql \
+            -h localhost \
+            -U postgres \
+            -d fintech_banking \
+            -f .github/ci/setup_ci.sql
+
+      - name: Build and test dbt project
+        run: dbt build --profiles-dir .github/ci

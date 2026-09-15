@@ -1,0 +1,13 @@
+fintech_banking:
+  target: ci
+
+  outputs:
+    ci:
+      type: postgres
+      host: localhost
+      user: postgres
+      password: postgres
+      port: 5432
+      dbname: fintech_banking
+      schema: "{{ env_var('DBT_SCHEMA', 'analytics') }}"
+      threads: 4

@@ -9,5 +9,5 @@ fintech_banking:
       password: postgres
       port: 5432
       dbname: fintech_banking
-      schema: analytics
+      schema: "{{ env_var('DBT_SCHEMA', 'analytics') }}"
       threads: 4

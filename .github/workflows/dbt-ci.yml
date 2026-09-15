@@ -9,6 +9,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
 
+    env:
+      DBT_SCHEMA: ci_pr
+
     services:
       postgres:
         image: postgres:17
@@ -28,7 +31,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout repository
+      - name: Checkout PR code
         uses: actions/checkout@v6
 
       - name: Set up Python
@@ -41,14 +44,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install dbt-core==1.12.3 dbt-postgres==1.11.0
 
-      - name: Install dbt packages
+      - name: Install PR dbt packages
         run: dbt deps
 
       - name: Test database connection
         run: dbt debug --profiles-dir .github/ci
-
-      - name: Parse dbt project
-        run: dbt parse --profiles-dir .github/ci
 
       - name: Load CI fixture data
         env:
@@ -60,5 +60,37 @@ jobs:
             -d fintech_banking \
             -f .github/ci/setup_ci.sql
 
-      - name: Build and test dbt project
-        run: dbt build --profiles-dir .github/ci
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          path: main_state
+
+      - name: Install main dbt packages
+        working-directory: main_state
+        run: dbt deps
+
+      - name: Build main baseline
+        working-directory: main_state
+        env:
+          DBT_SCHEMA: ci_main
+        run: |
+          dbt build \
+            --profiles-dir "$GITHUB_WORKSPACE/.github/ci" \
+            --target-path "$GITHUB_WORKSPACE/main_artifacts"
+
+      - name: Show modified models
+        run: |
+          dbt ls \
+            --select "state:modified+" \
+            --state "$GITHUB_WORKSPACE/main_artifacts" \
+            --profiles-dir .github/ci \
+            --resource-type model
+
+      - name: Slim CI build
+        run: |
+          dbt build \
+            --select "state:modified+" \
+            --defer \
+            --state "$GITHUB_WORKSPACE/main_artifacts" \
+            --profiles-dir .github/ci

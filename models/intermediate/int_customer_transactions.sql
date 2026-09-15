@@ -1,3 +1,4 @@
+-- Aggregates customer transaction activity across the full transaction history.
 select a.customer_id,
        count(t.transaction_id) as transaction_count,
        sum(t.amount_usd) as total_transaction_volume_usd,

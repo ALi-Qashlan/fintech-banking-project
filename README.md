@@ -271,7 +271,11 @@ Power BI intentionally contains minimal transformation logic:
 dbt      → transformation and business logic
 Power BI → visualization and consumption
 ```
+### Power BI Report
 
+The final dbt marts are consumed by a lightweight Power BI dashboard.
+
+[Download the Power BI report (.pbix)](powerbi/fintech_banking_dashboard.pbix)
 ---
 
 ## Key Engineering Decisions
